@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style> 
+        h1{
+            color: rgb(104, 104, 104);
+        }
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #646464;
+         /*   background: linear-gradient(to right, #3494e6, #ec6ead); */
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #3d3d3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            color: rgba(61, 255, 61, 0.973);
+        }
+
+        .winner-cell {
+            background-color: #1a532cd3; /* Change this color as per your design */#ffff5722
+            color: black; /* Change text color if needed */
+            font-size: 40px;
+        }
+
+       .rstbtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #0303039d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div id="board" class="board">
+            <!-- The game board will be dynamically generated here -->
+        </div>
+        <button class="rstbtn" onclick="resetGame()">Reset Game</button>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        function handleCellClick(index) {
+            if (gameBoard[index] === '' && gameActive) {
+                gameBoard[index] = currentPlayer;
+                document.getElementById(`cell${index}`).innerText = currentPlayer;
+
+                if (checkWinner()) {
+                    document.getElementById('result').innerText = `Player ${currentPlayer} wins!`;
+                    highlightWinnerCells();
+                    gameActive = false;
+                } else if (gameBoard.every(cell => cell !== '')) {
+                    document.getElementById('result').innerText = 'It\'s a draw!';
+                    gameActive = false;
+                } else {            
+               
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            return winningCombos.some(combo => {
+                const [a, b, c] = combo;
+                return gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c];
+            });
+        }
+
+        function highlightWinnerCells() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            for (const combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c]) {
+                    document.getElementById(`cell${a}`).classList.add('winner-cell');
+                    document.getElementById(`cell${b}`).classList.add('winner-cell');
+                    document.getElementById(`cell${c}`).classList.add('winner-cell');
+                }
+            }
+        }
+
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            document.getElementById('result').innerText = '';
+            updateBoard();
+        }
+
+        function updateBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.id = `cell${i}`;
+                cell.addEventListener('click', () => handleCellClick(i));
+                cell.innerText = gameBoard[i];
+                board.appendChild(cell);
+            }
+        }
+
+        updateBoard();
+    </script>
+</body>
+</html>

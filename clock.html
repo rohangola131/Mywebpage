@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Current Time</title>
+    <style>
+        #clock {
+            font-family: sans-serif;
+            font-size: 100px;
+            color: green;
+            text-align: center;
+            border: 2px;
+        }
+h1 { 
+  font-size: 60px;
+  text-align: center;
+}
+    </style>
+</head>
+<body>
+    <h1>Current Time</h1>
+    <p id="clock"></p>
+    <script>
+        // Get a reference to the clock element
+        var clockElement = document.getElementById("clock");
+
+        // Define a function to update the clock
+        function updateClock() {
+            // Get the current date and time
+            var date = new Date();
+
+            // Format the date and time as a string
+            var displayDate = date.toLocaleDateString();
+            var displayTime = date.toLocaleTimeString();
+
+            // Set the clock element's inner HTML to the formatted string
+            clockElement.innerHTML =  " " + displayTime;
+        }
+
+        // Call the updateClock function every second
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
